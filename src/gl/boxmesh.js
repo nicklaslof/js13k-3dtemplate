@@ -2,7 +2,7 @@
 const indicies = [0,1,2,0,2,3];
 //The mesh class which is responsive for rendering an object on the screen. See WebGL or OpenGL-tutorials for more info how this works.
 //This one is only usable for boxes/squares
-export default class Mesh{
+export default class BoxMesh{
     constructor(gl, x,y,z){
         this.verticies = [];
 

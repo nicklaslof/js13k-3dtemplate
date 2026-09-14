@@ -117,15 +117,15 @@ export default class Game{
         this.entities.push(new Box(-1,0,-8.0,this.gl, this.shaderProgram,this.glTexture,0));
         this.entities.push(new Box(-1,0,-10.0,this.gl, this.shaderProgram,this.glTexture,0));
         this.entities.push(new Box(-1,0,-12.0,this.gl, this.shaderProgram,this.glTexture,0));*/
-        this.entities.push(new Box(-1,0,-15.0,this.gl, this.shaderProgram,this.glTexture,0));
+        //this.entities.push(new Box(-1,0,-15.0,this.gl, this.shaderProgram,this.glTexture,0));
 
         this.entities.push(new Floor(-16,0,-16,this.gl, this.shaderProgram,this.glTexture));
 
 
-        for (let i = 0; i < 1000; i++) {
-            this.entities.push(new Billboard(Math.floor(-10+Math.random()*100),0,-10+Math.floor(Math.random()*100),this.gl,this.shaderProgram,this.glTexture));
+        //for (let i = 0; i < 1000; i++) {
+        //    this.entities.push(new Billboard(Math.floor(-10+Math.random()*100),0,-10+Math.floor(Math.random()*100),this.gl,this.shaderProgram,this.glTexture));
             //this.entities.push(new Billboard(Math.floor(-10+Math.random()*100),0,-10+Math.floor(Math.random()*100),this.gl,this.shaderProgram,this.glTexture));
-        }
+        //}
 
         this.last = performance.now();
         this.counter = 0;

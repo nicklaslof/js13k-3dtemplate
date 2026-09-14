@@ -1,4 +1,4 @@
-import MeshBuilder from "../gl/meshbuilder.js";
+import BoxMeshBuilder from "../gl/boxmeshbuilder.js";
 import Texture from "../gl/texture.js";
 export default class Billboard{
     constructor(x,y,z, gl, shaderProgram, glTexture){
@@ -8,12 +8,12 @@ export default class Billboard{
 
         this.pos = {x:x, y:y, z:z};
 
-        var meshBuild = MeshBuilder.start(gl,x,y,z,0.5);
+        var meshBuild = BoxMeshBuilder.start(gl,x,y,z,0.5);
 
         this.texture = new Texture(this.glTexture,0,32,16,16);
 
-        MeshBuilder.billboard(this.texture.getUVs(),meshBuild,0,0,0,2,1,[1.0,1.0,1.0,1.0],null);
-        this.mesh = MeshBuilder.build(meshBuild);
+        BoxMeshBuilder.billboard(this.texture.getUVs(),meshBuild,0,0,0,2,1,[1.0,1.0,1.0,1.0],null);
+        this.mesh = BoxMeshBuilder.build(meshBuild);
         
     }
 
