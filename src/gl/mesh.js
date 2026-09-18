@@ -3,6 +3,7 @@ export default class Mesh{
     constructor(gl, x,y,z){
         this.verticies = [];
         this.indicies = [];
+        this.colors = [];
 
         this.position = [x,y,z];
 
@@ -14,7 +15,7 @@ export default class Mesh{
         this.setPos(x,y,z);
 
         this.positionsBuffer = gl.createBuffer();
-        //this.colorsBuffer = gl.createBuffer();
+        this.colorsBuffer = gl.createBuffer();
        // this.lightsBuffer = gl.createBuffer();
         this.uvsBuffer = gl.createBuffer();
         this.indiciesBuffer = gl.createBuffer();
@@ -22,61 +23,45 @@ export default class Mesh{
     }
 
     //Add verticies
-    addVerticies(verticies,uvs){
+    addVerticies(verticies){
         verticies.forEach(v => this.verticies.push(v));
-        //this.updateCols(cols);
-        this.updateUVs(uvs);
-        //this.updateLights(lights);
     }
 
     addIndicies(indicies){
         indicies.forEach(i => this.indicies.push(i));
     }
 
+    addColors(colors){
+        this.updateCols(colors);
+    }
+
     updateMesh(){
         //Calculate verticies, colors, UVs and lights of this mesh.
         //This will create the Float32Arrays and Uint16Arrays that WebGL wants the data in.
 
-        //Every 6th verticies needs one index (two triangles)
-        //let indiciesNeeded = this.verticies.length/6;
-
-        //Assign correct sizes of the buffers. Verticies x,y,z, Colors r,g,b,a, UVs 4 corners with 2 values each. Indicies 6 values forming two triangles
-        this.verticiesBuffer32 = new Float32Array(this.verticies.length*3);
-        //this.cArrayBuffer32 = new Float32Array(this.verticies.length*4);
-        this.uvArrayBuffer32 = new Float32Array(this.uvs.length*8);
+        this.verticiesBuffer32 = new Float32Array(this.verticies.length);
+        this.cArrayBuffer32 = new Float32Array(this.colors.length);
+        //this.uvArrayBuffer32 = new Float32Array(this.uvs.length*8);
         this.indiciesBuffer16 = new Uint16Array(this.indicies.length);
 
-        let vertexCounter = 0;
-        let counter = 0;
 
         this.verticiesBuffer32.set(this.verticies);
         this.indiciesBuffer16.set(this.indicies);
-
-        //Since we are always using squares the indicies will be the same for every 6 verticies
-        /*for (let i = 0; i < indiciesNeeded; i++){
-            for (let c = 0; c < 6; c++){
-                this.indiciesBuffer16[counter+c] = indicies[c] + vertexCounter;
-            }
-            vertexCounter += 4;
-            counter += 6;
-        }
-
-        this.numberOfIndicies = counter;*/
 
         //Upload the arrays to the buffers on the graphic card
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.positionsBuffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, this.verticiesBuffer32, this.gl.DYNAMIC_DRAW);
 
-        //this.uploadCols();
+        this.uploadCols();
         //this.uploadLights();
-        this.uploadUVs();
+       //this.uploadUVs();
         this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this.indiciesBuffer);
         this.gl.bufferData(this.gl.ELEMENT_ARRAY_BUFFER, this.indiciesBuffer16, this.gl.DYNAMIC_DRAW);
     }
 
     cleanUp(){
         this.verticies = [];
-        this.cs = [];
+        this.colors = [];
         this.uvs = [];
         this.verticiesBuffer32 = null;
         this.cArrayBuffer32 = null;
@@ -109,7 +94,7 @@ export default class Mesh{
     }
 
     updateCols(c){
-        this.cs = c.flat();
+        this.colors = c.flat();
     }
     updateLights(lights){
         this.lights = lights.flat();
@@ -121,7 +106,8 @@ export default class Mesh{
     }
 
     uploadCols(){
-        this.cArrayBuffer32.set(this.cs);
+        console.log(this.colors);
+        this.cArrayBuffer32.set(this.colors);
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.colorsBuffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, this.cArrayBuffer32, this.gl.DYNAMIC_DRAW);
     }
@@ -149,17 +135,17 @@ export default class Mesh{
         gl.vertexAttribPointer(shaderProgram.locations.attribLocations.vertexPosition, 3, gl.FLOAT, false, 0, 0);
         gl.enableVertexAttribArray(shaderProgram.locations.attribLocations.vertexPosition);
 
-        /*gl.bindBuffer(gl.ARRAY_BUFFER, this.colorsBuffer);
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.colorsBuffer);
         gl.vertexAttribPointer(shaderProgram.locations.attribLocations.color, 4, gl.FLOAT, false, 0, 0);
         gl.enableVertexAttribArray(shaderProgram.locations.attribLocations.color);
 
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.lightsBuffer);
+        /*gl.bindBuffer(gl.ARRAY_BUFFER, this.lightsBuffer);
         gl.vertexAttribPointer(shaderProgram.locations.attribLocations.light, 4, gl.FLOAT, false, 0, 0);
         gl.enableVertexAttribArray(shaderProgram.locations.attribLocations.light);*/
 
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.uvsBuffer);
-        gl.vertexAttribPointer(shaderProgram.locations.attribLocations.uv, 2, gl.FLOAT, false, 0, 0);
-        gl.enableVertexAttribArray(shaderProgram.locations.attribLocations.uv);
+        //gl.bindBuffer(gl.ARRAY_BUFFER, this.uvsBuffer);
+        //gl.vertexAttribPointer(shaderProgram.locations.attribLocations.uv, 2, gl.FLOAT, false, 0, 0);
+        //gl.enableVertexAttribArray(shaderProgram.locations.attribLocations.uv);
 
         gl.useProgram(shaderProgram.shaderProgram);
 

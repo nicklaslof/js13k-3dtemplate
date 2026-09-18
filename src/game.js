@@ -104,7 +104,7 @@ export default class Game{
                 discard;
               gl_FragColor=c;*/
               vec4 col=texture2D(s,uv);
-              gl_FragColor=col;
+              gl_FragColor=vc;
             }`);
         this.entities = [];
         this.glTexture = new GlTexture(this.gl, "t.png");
